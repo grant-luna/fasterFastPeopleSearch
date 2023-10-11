@@ -75,10 +75,17 @@ document.addEventListener('DOMContentLoaded', () => {
   
     return csv;
   }
+
+  let clearButton = document.querySelector('button[type="button"]');
+  clearButton.addEventListener('click', (event) => {
+    event.preventDefault();
+
+    let agentName = document.querySelector('input[name="agentName"]');
+    let farmName = document.querySelector('input[name="farmName"]');
+    let farmFile = document.querySelector('input[name="farmFile"]');
+
+    agentName.value = '';
+    farmName.value = '';
+    farmFile.value = '';
+  });
 });
-
-
-
-
-
-
