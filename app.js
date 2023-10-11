@@ -3,7 +3,8 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
-    const fileInput = document.querySelector('input[name="farmFile"');
+
+    const fileInput = document.querySelector('input[name="farmFile"]');
     const farmName = document.querySelector('input[name="farmName"]').value;
 
     if (fileInput.files.length > 0) {
@@ -63,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         "Second Owner Name": (row["Owner2 First Name"] || '') + ' ' + (row["Owner2 Last Name"] || ''),
         "Owner Occupied": row['Owner Occupied'] === 'Y' ? 'Yes' : 'No',
         "Site Address": `${siteAddressHouseNumber} ${siteAddressStreetName} ${siteAddressUnitNumber ? `#${siteAddressUnitNumber}` : ''} ${siteAddressCity} ${siteAddressState} ${siteAddressZip}`,
-        "Site Address Contact Information Link": `https://www.fastpeoplesearch.com/address/${siteAddressHouseNumber.replace(/ /g, "-")}-${siteAddressUnitNumber}-${siteAddressStreetName.replace(/ /g, "-")}_${siteAddressCity.replace(/ /g, "-")}-${siteAddressState}`,
+        "Site Address Contact Information Link": `https://www.fastpeoplesearch.com/address/${siteAddressHouseNumber.replace(/ /g, "-")}-${siteAddressStreetName.replace(/ /g, "-")}-${siteAddressUnitNumber}_${siteAddressCity.replace(/ /g, "-")}-${siteAddressState}`,
         "Mailing (Likely Owner) Address": `${mailAddress} ${mailCity} ${mailState} ${siteAddressZip}`,
         "Mailing Address Contact Information Link": `https://www.fastpeoplesearch.com/address/${mailAddress.replace(/ /g, "-")}_${mailCity.replace(/ /g, "-")}-${mailState}`
       };
@@ -75,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return csv;
   }
 });
+
 
 
 
