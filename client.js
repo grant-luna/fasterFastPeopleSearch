@@ -6,12 +6,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const fileSource = document.querySelector('select[name="fileSource"').value;
     const fileInput = document.querySelector('input[name="farmFile"]');
     const farmName = document.querySelector('input[name="farmName"]').value;
-
+    const tag = document.querySelector('input[name="tag"]');
     if (fileInput.files.length > 0) {
       const file = fileInput.files[0];
 
       const fileContent = await readFile(file);
-      const processFileByFileSource = selectFileProcessingType(fileSource);
+      const processFileByFileSource = selectFileProcessingType(fileSource, tag);
       const processedData = processCSVData(fileContent, processFileByFileSource);
 
       const blob = new Blob([processedData], { type: 'text/csv' });
@@ -86,15 +86,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const mailAddress = row["Owner Mailing Address"] || '';
     const mailCity = row["Owner Mailing City"] || '';
     const mailState = row["Owner Mailing State"] || '';
-
+    
     return {
       "First Owner Name": `${row["Owner 1 First Name"]} ${row['Owner 1 Last Name']}` || '',
       "Second Owner Name": `${row["Owner 2 First Name"]} ${row['Owner 2 Last Name']}` || '',
       "Owner Occupied": row['Owner Occupied'] === 'true' ? 'Yes' : 'No',
+      "Likely Owner Address": row['Owner Occupied'] === 'false' ? 'Mail Address' : 'Site Address',
       "Site Address": `${siteAddress} ${siteAddressCity}, ${siteAddressState}`,
       "Site Address Contact Information Link": `https://www.fastpeoplesearch.com/address/${siteAddress}_${siteAddressCity}-${siteAddressState}`.replace(/#/g, '').replace(/ /g, '-'),
       "Mail Address": `${mailAddress} ${mailCity}, ${mailState}`,
       "Mailing Address Contact Information Link": `https://www.fastpeoplesearch.com/address/${mailAddress}_${mailCity}-${mailState}`.replace(/#/g, '').replace(/ /g, '-'),
+      "Previous Sale Date": row["Last Sale Date"],
+      "Previous Sale Amount": row["Last Sale Amount"],
+      "Site Address Bedrooms": String(Number(row["Bedrooms"]).toFixed(2)),
+      "Site Address Bathrooms": String(Number(row["Bathrooms"]).toFixed(2)),
+      "Years Owned": String((Number(row["Ownership Length (Months)"]) / 12).toFixed(2)),
+      "Estimated Value": row["Estimated Value"],
+      "Estimated Equity": row["Estimated Equity"],
+      "Assessed Value": row["Assessed Total Value"],
     };
   }
 
