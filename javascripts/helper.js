@@ -46,7 +46,7 @@ export class Helper {
     document.querySelector('input[name="farm-name"]').value='';
     document.querySelector('input[name="farm-file"]').value = '';
     const tagsContainer = document.getElementById('tags-container');
-
+    Helper.hideFileTypeError();
     [...tagsContainer.children].forEach((tag) => {
       tag.remove();
     })
