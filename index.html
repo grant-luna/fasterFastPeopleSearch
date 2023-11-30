@@ -4,6 +4,7 @@
     <title>Faster Fast People Search</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@4.7.7/dist/handlebars.min.js"></script>
   </head>
   <body>
     <header>
@@ -38,7 +39,6 @@
       </form>
     </main>
     <footer></footer>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script type="text/x-handlebars-template" id="tags_template">
       <div id="tag-creation-container">
@@ -49,10 +49,59 @@
     <script type="text/x-handlebars-template" id="tag-template">
       <span class="tag">{{currentTag}}</span><span class="remove-tag">x</span>
     </script>
+    <script type="text/x-handlebars-template" id="error-template">
+      <small class="error-message">{{errorMessage}}</small>
+    </script>
     <script type="text/x-handlebars-template" id="filetype-error-template">
       <small id="filetype-error">The chosen file is not a supported file type.  Please import a file from Fidelity Total Farm or Propwire</small>
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/handlebars@4.7.7/dist/handlebars.min.js"></script>
+    <script type="text/x-handlebars-template" id="contact-results-template">
+      <section id="contacts-download">
+        <h3>Want to download the file to your computer?</h3>
+        <button type="button" id="file-download-button">Download File ></button>
+      </section>
+      <section id="contacts-container">
+        {{#each contacts}}
+        <div class="contact-container">
+          <div class="contact-container-left">
+            <div class="owner-names">
+              <small>Owner Names</small>
+              <h3>{{this.[Owner 1 Name]}}</h3>
+              <h3>{{this.[Owner 2 Name]}}</h3>
+            </div>
+            <ul class="property-information">
+              <li><strong>Owner Occupied:</strong> {{this.[Owner Occupied]}}</li>
+              <li><strong>Bedrooms:</strong> {{this.[Bedrooms]}}</li>
+              <li><strong>Bathrooms:</strong> {{this.[Bathrooms]}}</li>
+              <li><strong>Years of Ownership:</strong> {{this.[Years in Property]}}</li>
+              <li><strong>Purchase Date:</strong> {{this.[Purchase Date]}}</li>
+              <li><strong>Purchase Price:</strong> {{this.[Purchase Price]}}</li>
+              <li><strong>Estimated Value:</strong> {{this.[Estimated Value]}}</li>
+            </ul>
+          </div>
+          <div class="address-containers">
+            <div class="property-address">
+              <small>Property Address</small>
+              <h3>{{this.[Site Address]}}</h3>
+            </div>
+            <a href="{{this.[Site Address Contact Information Link]}}" target="_blank" class="fast-people-search-link">Contact Information ></a>
+          </div>
+          {{#if (isAbsenteeOwned this.[Owner Occupied])}}
+          <div class="address-containers">
+            <div class="property-address">
+              <small>Mailing Address</small>
+              <h3>{{this.[Mail Address]}}</h3>
+            </div>
+            <div class="absentee-ownerd-notification">
+              <small>The property is absentee-owned.  The owner likely lives at this address!</small>
+            </div>
+            <a href="{{this.[Mail Address Contact Information Link]}}" target="_blank" class="fast-people-search-link">Contact Information ></a>
+          </div>
+          {{/if}}
+        </div>
+        {{/each}}
+      </section>
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
     <script type="module" src="client.js"></script>
   </body>
