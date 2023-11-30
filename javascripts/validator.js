@@ -108,6 +108,27 @@ export class Validator {
     ],
   }
 
+  static invalidFormData(formData) {
+    const invalidInputs = [];
+
+    formData = [...formData.entries()];
+    const farmNameIndex = formData.findIndex((formInput) => formInput[0] === 'farm-name');
+    const farmFileIndex = formData.findIndex((formInput) => formInput[0] === 'farm-file');
+    const farmName = formData[farmNameIndex][1];
+    const farmFile = formData[farmFileIndex][1];
+    const farmFileType = Object.getPrototypeOf(farmFile).constructor.name;
+    
+    if (farmName.length === 0) {
+      invalidInputs.push(formData[farmNameIndex][0]);
+    }
+
+    if (farmFileType !== 'File' || farmFile.size === 0) {
+      invalidInputs.push(formData[farmFileIndex][0]);
+    }
+    
+    return invalidInputs.length > 0 ? invalidInputs : null;
+  }
+
   static validateHeaders(headers) {
     return new Promise(function (headers, resolve, reject) {
       let matchingHeader;
