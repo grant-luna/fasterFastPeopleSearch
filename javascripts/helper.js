@@ -23,6 +23,39 @@ export class Helper {
     filetypeFieldset.appendChild(div);
   }
 
+  static displayInputErrors(form) {
+    const errorMessages = {
+      'farm-name': 'The farm name must not be empty',
+      'farm-file': 'The chosen file is not a supported file type.  Please import a file from Fidelity Total Farm or Propwire',
+    }
+
+    const invalidInputs = Validator.invalidFormData(form);
+    const generateErrorMessage = Handlebars.compile(document.getElementById('error-template').innerHTML);
+    
+    invalidInputs.forEach((invalidInput) => {
+      let errorContainer = document.createElement('div');
+      errorContainer.classList.add('error-container');
+      errorContainer.innerHTML = generateErrorMessage({errorMessage: errorMessages[invalidInput]});
+      
+      let fieldsetContainer = document.querySelector(`input[name="${invalidInput}"]`).closest('fieldset');
+      
+      fieldsetContainer.appendChild(errorContainer);
+    })
+  }
+
+  static displayResults(reformattedCSVData) {
+    const contactResultsHtml = document.getElementById('contact-results-template').innerHTML;
+    const generateContactResults = Handlebars.compile(contactResultsHtml);
+    
+    document.querySelector('main').innerHTML = generateContactResults({contacts: reformattedCSVData});
+    const fileDownloadButton = document.getElementById('file-download-button');
+    fileDownloadButton.addEventListener('click', function (reformattedCSVData, event) {
+      event.preventDefault();
+      Helper.triggerFileDownload(reformattedCSVData);
+    }.bind(null, reformattedCSVData));
+    
+  }
+
   static findTags() {
     return [...document.querySelectorAll('.tag-container')].map((tagContainer) => {
       return [...tagContainer.children][0].textContent;
@@ -55,6 +88,10 @@ export class Helper {
   static async handleGenerate(event) {
     event.preventDefault();
     
+    const form = new FormData(document.querySelector('form'));
+
+    localStorage.farmName = document.querySelector('input[name="farm-name"]').value || 'farm-file';
+
     const fileInput = document.querySelector('input[name="farm-file"]').files[0];
     const rawCSVData = await Helper.generateCSVFile(fileInput);
     const parsedCSVData = await Helper.parseCSVFile(rawCSVData);
@@ -66,9 +103,9 @@ export class Helper {
       // refactor the two lines below to pass tags in as an argument to formatDataByFileType
       const reformattedCSVData = FileFormatter.formatDataByFileType(parsedCSVData, fileType)
       reformattedCSVData.forEach((row) => row["Tags"] = tags);
+      
       Helper.hideFileTypeError();
-      const parsedCSVFile = Papa.unparse(reformattedCSVData);
-      Helper.triggerFileDownload(parsedCSVFile);
+      Helper.displayResults(reformattedCSVData);
     } catch (error) {
       Helper.displayFileTypeError();
       console.error('Error:', error);
@@ -93,7 +130,7 @@ export class Helper {
   }
 
   static handleTagsInput(event) {
-    const currentTag = event.target.value;
+    let currentTag = event.target.value;
 
     if (currentTag === ',') {
       event.target.value = '';
@@ -105,10 +142,20 @@ export class Helper {
       const finalCharacter = currentTag[currentTag.length - 1];
       
       if (finalCharacter === ',') {
-        Helper.addTagToForm(currentTag.slice(0, currentTag.length -1));
+        currentTag = currentTag.slice(0, currentTag.length - 1);
+                
+        Helper.addTagToForm(currentTag);
         event.target.value = '';
-        event.target.click();
+        event.target.click()
       }
+    }
+  }
+
+  static hideErrors() {
+    const errors = [...document.querySelectorAll('.error-container')];
+
+    if (errors.length > 0) {
+      errors.forEach((error) => error.remove());
     }
   }
 
@@ -131,11 +178,26 @@ export class Helper {
     });
   }
 
-  static triggerFileDownload(parsedCSVFile) {
+  static tagExists(currentTag) {
+    const currentTags = [...document.getElementById('tags-container').children].map((tagContainer) => {
+      return tagContainer.children[0].textContent;
+    });
+    
+    return currentTags.some((tag) => {
+      const tagRegexp = new RegExp(currentTag, 'i');
+      
+      return tagRegexp.test(tag);
+    })
+  }
+
+  static triggerFileDownload(reformattedCSVData) {
+    
+    const parsedCSVFile = Papa.unparse(reformattedCSVData);
     const blob = new Blob([parsedCSVFile], {type: 'text/csv;charset=utf-8;'});
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = `${document.querySelector('input[name="farm-name"]').value}.contacts.csv`;
+    
+    link.download = `${localStorage.farmName || 'farm-file'}.contacts.csv`;
 
     document.body.appendChild(link);
     link.click();
