@@ -2,6 +2,8 @@ import { Helper } from './javascripts/helper.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   Client.attachEventListeners();
+  Client.registerPartials();
+  Client.registerHandlebarsHelperFunctions();
 });
 
 export class Client {
@@ -45,5 +47,16 @@ export class Client {
     const tagsFieldset = document.getElementById('tags-fieldset');
 
     tagsFieldset.addEventListener('click', Helper.handleRemoveTag);
+  }
+
+  static registerPartials() {
+    const contactPartial = document.getElementById('contact-partial');
+    Handlebars.registerPartial('contact-partial', contactPartial);
+  }
+
+  static registerHandlebarsHelperFunctions() {
+    Handlebars.registerHelper('isAbsenteeOwned', function(isOwnerOccupied) {
+      return isOwnerOccupied === 'No';
+    });
   }
 }
