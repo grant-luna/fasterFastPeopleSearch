@@ -13,6 +13,7 @@ body {
   font-family: Arial, sans-serif;
   background-color: #F5F0F3;
   color: #202738;
+  min-width: 700px;
 }
 
 nav {
@@ -25,6 +26,8 @@ nav {
   align-items: center;
   justify-content: space-around;
   font-style: italic;
+  border-top: 20px solid #202738;
+  border-bottom: 2px solid #202738;
 }
 
 nav h1 {
@@ -61,6 +64,96 @@ main h1, main p {
   margin-bottom: 10px;
 }
 
+#contacts-download {
+  display: flex;
+  width: 100%;
+  border: 1px solid #202738;
+  padding: 2%;
+  align-items: center;
+  justify-content: space-around;
+  margin-bottom: 10px;
+}
+
+#contacts-download button {
+  width: 20%;
+}
+
+#contacts-container {
+  align-self: flex-start;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-container {
+  border: 1px solid #202738;
+  border-radius: 4px;
+  padding: 3%;
+  margin-bottom: 1%;
+  display: flex;
+}
+
+.contact-container h3 {
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+.contact-container small {
+  font-style: italic;
+}
+
+.contact-container-left { 
+  width: 25%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.owner-names {
+  margin-bottom: 25px;
+}
+
+.property-information {
+  list-style: none;
+}
+
+.property-information li {
+  font-size: .75rem;
+}
+
+.address-containers {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-right: 10px;
+  position: relative;
+}
+
+.fast-people-search-link, #file-download-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #4CAF50;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  font-weight: bolder;
+  border: none;
+  border-radius: 5px;
+}
+
+.fast-people-search-link:hover, #file-download-button:hover {
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0, 128, 255, 0.8);
+}
+
+.absentee-ownerd-notification {
+  padding: 5px;
+  border: 3px solid #4CAF50;
+  border-radius: 4px;
+  text-align: center;
+}
+
 form fieldset {
   padding: 25px;
   border-radius: 5px;
@@ -81,7 +174,8 @@ form {
   flex-direction: column; /* Align elements vertically */
 }
 
-#filetype-error-container {
+#filetype-error-container,
+.error-container {
   background-color: #FF9494;
   border: 1px dashed #FF9494;
   text-align: center;
@@ -89,7 +183,8 @@ form {
   border-radius: 4px;
 }
 
-#filetype-error {
+#filetype-error,
+.error-message {
   color: white;
   font-weight: bolder;
 }
@@ -182,5 +277,13 @@ button[type="button"] {
   border: 1px solid #202738;
   background-color: transparent; /* Red color */
 }
+
+footer {
+  background-color: #202738;
+  padding: 20px;
+  bottom: 0;
+}
+
+
 
 
