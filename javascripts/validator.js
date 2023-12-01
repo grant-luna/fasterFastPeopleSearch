@@ -131,6 +131,7 @@ export class Validator {
 
   static validateHeaders(headers) {
     return new Promise(function (headers, resolve, reject) {
+      
       let matchingHeader;
       
       for (let property in this.validHeaders) {
