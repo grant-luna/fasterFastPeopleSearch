@@ -48,12 +48,12 @@ export class Helper {
     const generateContactResults = Handlebars.compile(contactResultsHtml);
     
     document.querySelector('main').innerHTML = generateContactResults({contacts: reformattedCSVData});
+    
     const fileDownloadButton = document.getElementById('file-download-button');
     fileDownloadButton.addEventListener('click', function (reformattedCSVData, event) {
       event.preventDefault();
       Helper.triggerFileDownload(reformattedCSVData);
     }.bind(null, reformattedCSVData));
-    
   }
 
   static findTags() {
@@ -88,11 +88,10 @@ export class Helper {
   static async handleGenerate(event) {
     event.preventDefault();
     
+    const fileInput = document.querySelector('input[name="farm-file"]').files[0];
     const form = new FormData(document.querySelector('form'));
-
     localStorage.farmName = document.querySelector('input[name="farm-name"]').value || 'farm-file';
 
-    const fileInput = document.querySelector('input[name="farm-file"]').files[0];
     const rawCSVData = await Helper.generateCSVFile(fileInput);
     const parsedCSVData = await Helper.parseCSVFile(rawCSVData);
     const headers = Object.keys(parsedCSVData[0]);
@@ -100,12 +99,11 @@ export class Helper {
     
     try {
       const fileType = await Validator.validateHeaders(headers);
-      // refactor the two lines below to pass tags in as an argument to formatDataByFileType
-      const reformattedCSVData = FileFormatter.formatDataByFileType(parsedCSVData, fileType)
-      reformattedCSVData.forEach((row) => row["Tags"] = tags);
+      const reformattedCSVData = FileFormatter.formatDataByFileType(parsedCSVData, fileType, tags);
       
       Helper.hideFileTypeError();
       Helper.displayResults(reformattedCSVData);
+
     } catch (error) {
       Helper.displayFileTypeError();
       console.error('Error:', error);
