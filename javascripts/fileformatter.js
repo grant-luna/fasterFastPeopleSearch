@@ -4,8 +4,10 @@ export class FileFormatter {
     "Fidelity Total Farm": this.processFidelityTotalFarmRow,
   }
 
-  static formatDataByFileType(parsedCSVData, fileType) {
-    return parsedCSVData.map(this.fileTypeFunctions[fileType]);
+  static formatDataByFileType(parsedCSVData, fileType, tags) {
+    parsedCSVData = parsedCSVData.map(this.fileTypeFunctions[fileType]);
+    parsedCSVData.forEach((row) => row["Tags"] = tags);
+    return parsedCSVData;
   }
 
   static processFidelityTotalFarmRow(row) {
