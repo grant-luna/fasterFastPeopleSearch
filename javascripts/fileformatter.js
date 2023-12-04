@@ -21,7 +21,7 @@ export class FileFormatter {
       'Site Address': `${row["Site Address House Number"] || ''} ${row["Site Address Street Prefix"] || ''} ${row["Site Address Street Name"] || ''} ${row["Site Address Unit Number"] ? `Unit ${row["Site Address Unit Number"]} ` : ''}${row["Site Address City"]}, ${row["Site Address State"]} ${row["Site Address Zip+4"]}`.replace(/^null$/g, ''),
       'Site Address Contact Information Link': `${fpsAddressPath}${String(row["Site Address House Number"] || '') }-${row["Site Address Street Prefix"] ? `${row["Site Address Street Prefix"]}-` : ''}${(row["Site Address Street Name"] || '').replace(/ /g, '-')}${row["Site Address Unit Number"] ? `-${String(row["Site Address Unit Number"])}` : ''}_${(row["Site Address City"] || '').replace(/ /g, '-')}-${row["Site Address State"] || ''}`,
       'Mail Address': `${row["Full Mail Address"]} ${row["Mail Address City"]}, ${row["Mail Address State"]} ${row["Mail Address Zip+4"]}`,
-      'Mail Address Contact Information Link': `${fpsAddressPath}${(row["Full Mail Address"] || '').replace(/ /g, '-')}_${(row["Mail Address City"] || '').replace(/ /g, '-')}-${row["Mail Address State"]}`,
+      'Mail Address Contact Information Link': `${fpsAddressPath}${(row["Full Mail Address"] || '').replace(/ /g, '-')}_${(row["Mail Address City"] || '').replace(/ /g, '-')}-${row["Mail Address State"]}`.replace(/-[^a-z0-9]/gi, ''),
       'Years in Property': String(row["Years In Proper"] || ''),
       'Purchase Date': row["Sale Date"],
       'Purchase Price': row["Sales Price"],
