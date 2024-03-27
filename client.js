@@ -1,5 +1,5 @@
 import { Helper } from './javascripts/helper.js';
-
+// testing this out
 document.addEventListener('DOMContentLoaded', () => {
   Client.attachEventListeners();
   Client.registerPartials();
